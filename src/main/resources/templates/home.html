@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html xmlns = "http://www.w3.org/1999/xhtml" xmlns:th = "http://www.thymeleaf.org">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js" integrity="sha512-5yJ548VSnLflcRxWNqVWYeQZnby8D8fJTmYRLyvs445j1XmzR8cnWi85lcHx3CUEeAX+GrK3TqTfzOO6LKDpdw==" crossorigin="anonymous"></script>
+<head>
+	<title>Welcome to thymeleaf</title>
+</head>
+
+<body>
+	<h1> Hello Prathamesh</h1>
+	<h2> This is the H2</h2>
+	<img th:src = "@{/images/Cloud.jpg}"/>
+	
+	<script>
+	/*var url = 'ws://' + window.location.host + '/websocket/marco';
+/* 	var url = 'wss://localhost:8443/marco';
+	var sock = new WebSocket(url);
+	sock.onopen = function(){
+		console.log('Opening');
+		sayMarco();
+	};
+	sock.onmessage = function(e){
+		console.log('Received message: ', e.data);
+		setTimeout(function(){sayMarco()}, 2000);
+	};
+	
+	sock.onclose = function(){
+		console.log('Closing');
+	}
+	
+	function sayMarco(){
+		console.log('Sending Marco!');
+		sock.send('Marco!');
+	};
+	 */
+	
+	var url = 'https://' + window.location.host + '/marcopolo';
+	
+	
+	var sock = new SockJS(url);
+	var stomp = Stomp.over(sock);
+
+	var payload = JSON.stringify({'message' : 'marco!'});
+	
+	stomp.connect('guest', 'guest', function(frame){
+		stomp.send('/marco', {}, payload);
+	});
+	
+	
+	
+	var sock1 = new SockJS('hello');
+	var stomp1 = Stomp.over(sock1);
+	
+	stomp.connect('guest', 'guest', function(frame){
+		console.log("hello function");
+		stomp.subscribe("/topic/wsfeed", handleString);
+	})
+	
+	function handleString(incoming){
+		console.log(incoming.body);
+	}
+	
+	</script>
+</body>
+
+</html>
